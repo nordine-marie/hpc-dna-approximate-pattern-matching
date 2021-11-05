@@ -12,7 +12,7 @@
 
 #include <mpi.h>
 
-#define APM_DEBUG 1
+#define APM_DEBUG 0
 
 char * 
 read_input_file( char * filename, int * size )
