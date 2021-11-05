@@ -302,14 +302,15 @@ main( int argc, char ** argv )
 
       #pragma omp parallel 
       {
+        int j_end = (rank == nb_nodes-1) ?  part_bytes : part_bytes - size_pattern + 1;
         #pragma omp for schedule(guided) reduction(+:tmp_matches)
-        for ( j = 0 ; (j < part_bytes - size_pattern + 1 && rank == 0) || (j < part_bytes && rank != 0)  ; j++ ) 
+        for ( j = 0 ; j < j_end ; j++ ) 
         {
             column = (int *)malloc( (size_pattern+1) * sizeof( int ) ) ;
             if ( column == NULL ) {
             fprintf( stderr, "Error: unable to allocate memory for column (%ldB)\n",
                     (size_pattern+1) * sizeof( int ) ) ;
-            return 1 ;
+            exit(1);
             }
 
             int distance = 0 ;
