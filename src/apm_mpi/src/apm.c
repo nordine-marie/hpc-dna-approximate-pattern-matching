@@ -232,6 +232,7 @@ main( int argc, char ** argv )
   /* rank 0 play the role of divider */
   int part_bytes; // the number of bytes of the process part textfile
   MPI_Request requests[nb_nodes-1];
+  MPI_Status statutes[nb_nodes-1];
   if (rank == 0) {
     /* reading input file */
     buf = read_input_file( filename, &n_bytes ) ;
@@ -262,8 +263,7 @@ main( int argc, char ** argv )
         #if APM_DEBUG
             printf("Rank 0 sended part_bytes : %d to rank %d\n",part_bytes,i);
         #endif
-        MPI_Send(&buf[start],part_bytes,MPI_BYTE,i,0,MPI_COMM_WORLD);
-        //MPI_Isend(&buf[start],part_bytes,MPI_BYTE,i,0,MPI_COMM_WORLD,&requests[i]);
+        MPI_Send(&buf[start],part_bytes,MPI_BYTE,i,1,MPI_COMM_WORLD);
         #if APM_DEBUG
             printf("Rank 0 sended a part_buffer to rank %d\n",i);
         #endif
@@ -274,7 +274,9 @@ main( int argc, char ** argv )
   } else {
       // other process receive :
       // first : part_bytes :
+      printf("O");
       MPI_Recv(&part_bytes,1,MPI_INTEGER,0,0,MPI_COMM_WORLD,&status);
+      printf("K\n");
       // so they know how much to allocate
       buf = (char *) malloc((part_bytes+1)*sizeof(char));
       if ( buf == NULL )
@@ -283,7 +285,9 @@ main( int argc, char ** argv )
         return -1;
       }
       // secondly : part textfile :
-      MPI_Recv(buf,part_bytes,MPI_BYTE,0,0,MPI_COMM_WORLD,&status);
+      printf("O");
+      MPI_Recv(buf,part_bytes,MPI_BYTE,0,1,MPI_COMM_WORLD,&status);
+      printf("K\n");
   }
 
   for ( i = 0 ; i < nb_patterns ; i++ )
@@ -302,7 +306,7 @@ main( int argc, char ** argv )
           return 1 ;
       }
 
-      for ( j = 0 ; j < n_bytes ; j++ ) 
+      for ( j = 0 ; (j < part_bytes - size_pattern + 1 && rank == 0) || (j < part_bytes && rank != 0)  ; j++ ) 
       {
           int distance = 0 ;
           int size ;
@@ -323,9 +327,11 @@ main( int argc, char ** argv )
 
           size = size_pattern ;
           // modifying the edge case for the MPI process
+          
           if ( part_bytes - j < size_pattern )
           {
               size = part_bytes - j ;
+              printf("%d edge :\n",rank);
           }
 
           distance = levenshtein( pattern[i], &buf[j], size, column ) ;
@@ -339,16 +345,19 @@ main( int argc, char ** argv )
   }
 
   /* Sum the matches of each process with a MPI reduction */
-  MPI_Reduce(n_matches, global_matches, nb_patterns, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD); // don't know why it doesn't work...  
+  MPI_Reduce(n_matches, global_matches, nb_patterns, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
   
   /* Timer stop */
   gettimeofday(&t2, NULL);
 
   duration = (t2.tv_sec -t1.tv_sec)+((t2.tv_usec-t1.tv_usec)/1e6);
   #if APM_DEBUG
-  printf("Rank %d finished=====================================\n",rank);
+  printf("Rank %d finished  :",rank);
+  for ( i = 0 ; i < nb_patterns ; i++ ) {
+    printf( "%d, ",n_matches[i] ) ;
+  }
+  printf("=============\n");
   #endif
-  printf( "APM done in %lf s\n", duration ) ;
   
 
   /*****
@@ -357,7 +366,7 @@ main( int argc, char ** argv )
 
   if (rank == 0)
   {
-    printf("results :");
+    printf( "APM done in %lf s\n", duration ) ;
     for ( i = 0 ; i < nb_patterns ; i++ ) {
       printf( "Number of matches for pattern <%s>: %d\n", 
               pattern[i], global_matches[i] ) ;
