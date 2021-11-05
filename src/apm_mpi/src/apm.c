@@ -12,7 +12,7 @@
 
 #include <mpi.h>
 
-#define APM_DEBUG 0
+#define APM_DEBUG 1
 
 char * 
 read_input_file( char * filename, int * size )
@@ -119,7 +119,9 @@ main( int argc, char ** argv )
   MPI_Init_thread(&argc, &argv, required, &provided);
   MPI_Comm_size(MPI_COMM_WORLD, &nb_nodes);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
+  #if APM_DEBUG
+    printf("Process MPI rank %d started",rank);
+  #endif
 
   char ** pattern ;
   char * filename ;
@@ -172,7 +174,7 @@ main( int argc, char ** argv )
           return 1 ;
       } else if (l > max_len_pattern)
       {
-          max_len_pattern = i;
+          max_len_pattern = l;
       }
       
       
@@ -223,7 +225,7 @@ main( int argc, char ** argv )
   /* rank 0 play the role of divider */
   int part_bytes; // the number of bytes of the process part textfile
   MPI_Request requests[nb_nodes-1];
-  if (rank ==  0) {
+  if (rank == 0) {
     buf = read_input_file( filename, &n_bytes ) ;
     if ( buf == NULL )
     {
@@ -232,18 +234,20 @@ main( int argc, char ** argv )
 
     int start = 0; // start index of process
     int end = n_bytes/nb_nodes - 1 + (max_len_pattern - 1); // end index of process
-    for (int i = 1; i < nb_nodes; i++)
-    {
+    #if APM_DEBUG
+        printf( "MPI rank 0 will treat from bytes %d to %d\n", start, end);
+    #endif
+    for (int i = 1; i < nb_nodes; i++) {
         /* Index and process part bytes */
         start += (n_bytes/nb_nodes);
         end += (n_bytes/nb_nodes);
-        part_bytes = end - start;
-
         if (i == nb_nodes - 1 || end > n_bytes) {
             end = n_bytes;
         }
-        
-
+        part_bytes = end - start;
+        #if APM_DEBUG
+            printf("MPI rank %d will treat from bytes %d to %d\n",i,start,end);
+        #endif
         /* Sending to each process other than 0*/
         /* the part_bytes so they how much memory to allocate */
         MPI_Send(&part_bytes,1,MPI_INTEGER,i,0,MPI_COMM_WORLD);
@@ -256,18 +260,20 @@ main( int argc, char ** argv )
       // other process receive :
       // first : part_bytes :
       MPI_Recv(&part_bytes,1,MPI_INTEGER,0,0,MPI_COMM_WORLD,&status);
+      printf("yolo");
       // so they know how much to allocate
-      buf = (char *)malloc(part_bytes*sizeof(char));
+      buf = (char *)malloc(part_bytes*sizeof(char)+1);
       if ( buf == NULL )
       {
         fprintf( stderr, "Unable to allocate %ld byte(s) for buf array\n",part_bytes);
         return -1;
       }
       // secondly : part textfile :
-      MPI_Recv(&buf,part_bytes,MPI_BYTE,0,0,MPI_COMM_WORLD,&status);
+      MPI_Recv(buf,part_bytes,MPI_BYTE,0,0,MPI_COMM_WORLD,&status);
+      printf("hello from %d \n",rank);
   }
 
-
+  printf("hello from %d \n",rank);
   for ( i = 0 ; i < nb_patterns ; i++ )
   {
       int size_pattern = strlen(pattern[i]) ;
@@ -290,9 +296,16 @@ main( int argc, char ** argv )
           int size ;
 
 #if APM_DEBUG
-          if ( j % 100 == 0 )
+          if ( j % 10000 == 0 )
           {
           printf( "MPI rank %d : Processing byte %d (out of %d)\n",rank, j, n_bytes ) ;
+          printf("matches : ");
+          for (int i = 0; i < nb_patterns; i++)
+          {
+              printf("%d,",n_matches[i]);
+          }
+          printf("\n");
+          
           }
 #endif
 
