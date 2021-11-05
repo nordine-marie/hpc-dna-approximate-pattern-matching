@@ -302,7 +302,8 @@ main( int argc, char ** argv )
           return 1 ;
       }
 
-      for ( j = 0 ; (j < part_bytes - size_pattern + 1 && rank == 0) || (j < part_bytes && rank != 0)  ; j++ ) 
+      int j_end = (rank == nb_nodes-1) ?  part_bytes : part_bytes - size_pattern + 1;
+      for ( j = 0 ; j < j_end ; j++ ) 
       {
           int distance = 0 ;
           int size ;
