@@ -105,22 +105,19 @@ int levenshtein(char *s1, char *s2, int len, int * column) {
 int 
 main( int argc, char ** argv )
 {
-
   /* MPI initialisation 
-  NB : Since APM OMP is already done I know that all MPI calls can be done out
-  of OMP parallel regions.
   */
-  int required = MPI_THREAD_FUNNELED;
-  int provided;
   int nb_nodes;
   int rank; 
   MPI_Status status;
-
-  MPI_Init_thread(&argc, &argv, required, &provided);
+  MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &nb_nodes);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
   #if APM_DEBUG
-    printf("Process MPI rank %d started",rank);
+    char hostname[256];
+    gethostname(hostname, sizeof(hostname));
+    printf("Process MPI rank %d of PID %d on %s ready for attach\n",rank, getpid(), hostname);
   #endif
 
   char ** pattern ;
@@ -133,6 +130,7 @@ main( int argc, char ** argv )
   double duration ;
   int n_bytes ;
   int * n_matches ;
+  int * global_matches;
 
   /* Check number of arguments */
   if ( argc < 4 ) 
@@ -194,9 +192,18 @@ main( int argc, char ** argv )
           "looking for %d pattern(s) in file %s w/ distance of %d\n", 
           nb_patterns, filename, approx_factor ) ;
 
-  /* Allocate the array of matches */
+  /* Allocate the array of local matches */
   n_matches = (int *)malloc( nb_patterns * sizeof( int ) ) ;
   if ( n_matches == NULL )
+  {
+      fprintf( stderr, "Error: unable to allocate memory for %ldB\n",
+              nb_patterns * sizeof( int ) ) ;
+      return 1 ;
+  }
+
+    /* Allocate the array of global matches for the reductin of local n_matches*/
+  global_matches = (int *)malloc( nb_patterns * sizeof( int ) ) ;
+  if ( global_matches == NULL )
   {
       fprintf( stderr, "Error: unable to allocate memory for %ldB\n",
               nb_patterns * sizeof( int ) ) ;
@@ -226,6 +233,7 @@ main( int argc, char ** argv )
   int part_bytes; // the number of bytes of the process part textfile
   MPI_Request requests[nb_nodes-1];
   if (rank == 0) {
+    /* reading input file */
     buf = read_input_file( filename, &n_bytes ) ;
     if ( buf == NULL )
     {
@@ -244,14 +252,21 @@ main( int argc, char ** argv )
         if (i == nb_nodes - 1 || end > n_bytes) {
             end = n_bytes;
         }
-        part_bytes = end - start;
+        part_bytes = end - start + 1 ;
         #if APM_DEBUG
             printf("MPI rank %d will treat from bytes %d to %d\n",i,start,end);
         #endif
         /* Sending to each process other than 0*/
         /* the part_bytes so they how much memory to allocate */
         MPI_Send(&part_bytes,1,MPI_INTEGER,i,0,MPI_COMM_WORLD);
-        MPI_Isend(&buf[start],part_bytes,MPI_BYTE,i,0,MPI_COMM_WORLD,&requests[i]);
+        #if APM_DEBUG
+            printf("Rank 0 sended part_bytes : %d to rank %d\n",part_bytes,i);
+        #endif
+        MPI_Send(&buf[start],part_bytes,MPI_BYTE,i,0,MPI_COMM_WORLD);
+        //MPI_Isend(&buf[start],part_bytes,MPI_BYTE,i,0,MPI_COMM_WORLD,&requests[i]);
+        #if APM_DEBUG
+            printf("Rank 0 sended a part_buffer to rank %d\n",i);
+        #endif
         /* the start & end index of their part */
     }
     // Reset part_bytes for process 0 :
@@ -260,9 +275,8 @@ main( int argc, char ** argv )
       // other process receive :
       // first : part_bytes :
       MPI_Recv(&part_bytes,1,MPI_INTEGER,0,0,MPI_COMM_WORLD,&status);
-      printf("yolo");
       // so they know how much to allocate
-      buf = (char *)malloc(part_bytes*sizeof(char)+1);
+      buf = (char *) malloc((part_bytes+1)*sizeof(char));
       if ( buf == NULL )
       {
         fprintf( stderr, "Unable to allocate %ld byte(s) for buf array\n",part_bytes);
@@ -270,10 +284,8 @@ main( int argc, char ** argv )
       }
       // secondly : part textfile :
       MPI_Recv(buf,part_bytes,MPI_BYTE,0,0,MPI_COMM_WORLD,&status);
-      printf("hello from %d \n",rank);
   }
 
-  printf("hello from %d \n",rank);
   for ( i = 0 ; i < nb_patterns ; i++ )
   {
       int size_pattern = strlen(pattern[i]) ;
@@ -298,8 +310,8 @@ main( int argc, char ** argv )
 #if APM_DEBUG
           if ( j % 10000 == 0 )
           {
-          printf( "MPI rank %d : Processing byte %d (out of %d)\n",rank, j, n_bytes ) ;
-          printf("matches : ");
+          printf( "MPI rank %d : Processing byte %d (out of %d)\n",rank, j, part_bytes ) ;
+          printf("local matches of rank %d: ",rank);
           for (int i = 0; i < nb_patterns; i++)
           {
               printf("%d,",n_matches[i]);
@@ -327,15 +339,17 @@ main( int argc, char ** argv )
   }
 
   /* Sum the matches of each process with a MPI reduction */
-  int global_matches[nb_patterns];
-  MPI_Reduce(n_matches, global_matches, nb_patterns, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-
+  MPI_Reduce(n_matches, global_matches, nb_patterns, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD); // don't know why it doesn't work...  
+  
   /* Timer stop */
   gettimeofday(&t2, NULL);
 
   duration = (t2.tv_sec -t1.tv_sec)+((t2.tv_usec-t1.tv_usec)/1e6);
-
+  #if APM_DEBUG
+  printf("Rank %d finished=====================================\n",rank);
+  #endif
   printf( "APM done in %lf s\n", duration ) ;
+  
 
   /*****
    * END MAIN LOOP
@@ -343,12 +357,12 @@ main( int argc, char ** argv )
 
   if (rank == 0)
   {
+    printf("results :");
     for ( i = 0 ; i < nb_patterns ; i++ ) {
       printf( "Number of matches for pattern <%s>: %d\n", 
               pattern[i], global_matches[i] ) ;
     }
   }
-
   MPI_Finalize();
   return 0 ;
 }
