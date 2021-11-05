@@ -2,8 +2,8 @@ SRC_DIR=src
 HEADER_DIR=/usr/lib/x86_64-linux-gnu/openmpi/include
 OBJ_DIR=obj
 
-CC=gcc
-CFLAGS=-O3 -I$(HEADER_DIR)
+CC=mpicc
+CFLAGS=-O3 -I$(HEADER_DIR) -fopenmp
 LDFLAGS=
 
 SRC= apm.c
