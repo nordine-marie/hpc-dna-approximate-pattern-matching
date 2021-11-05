@@ -274,9 +274,7 @@ main( int argc, char ** argv )
   } else {
       // other process receive :
       // first : part_bytes :
-      printf("O");
       MPI_Recv(&part_bytes,1,MPI_INTEGER,0,0,MPI_COMM_WORLD,&status);
-      printf("K\n");
       // so they know how much to allocate
       buf = (char *) malloc((part_bytes+1)*sizeof(char));
       if ( buf == NULL )
@@ -285,9 +283,7 @@ main( int argc, char ** argv )
         return -1;
       }
       // secondly : part textfile :
-      printf("O");
       MPI_Recv(buf,part_bytes,MPI_BYTE,0,1,MPI_COMM_WORLD,&status);
-      printf("K\n");
   }
 
   for ( i = 0 ; i < nb_patterns ; i++ )
@@ -326,12 +322,10 @@ main( int argc, char ** argv )
 #endif
 
           size = size_pattern ;
-          // modifying the edge case for the MPI process
-          
+          // modifying the edge case for the last MPI process
           if ( part_bytes - j < size_pattern )
           {
               size = part_bytes - j ;
-              printf("%d edge :\n",rank);
           }
 
           distance = levenshtein( pattern[i], &buf[j], size, column ) ;
