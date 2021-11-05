@@ -111,7 +111,9 @@ main( int argc, char ** argv )
   int nb_nodes;
   int rank; 
   MPI_Status status;
-  MPI_Init(&argc, &argv);
+  int required = MPI_THREAD_FUNNELED;
+  int provided;
+  MPI_Init_thread(&argc, &argv, required, &provided);
   MPI_Comm_size(MPI_COMM_WORLD, &nb_nodes);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
