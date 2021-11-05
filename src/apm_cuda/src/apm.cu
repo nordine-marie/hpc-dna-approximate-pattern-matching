@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <math.h>
 
 #include <cuda.h>
 #include <cuda_runtime.h>
@@ -70,32 +71,51 @@ read_input_file(char *filename, int *size)
 
 #define MIN3(a, b, c) ((a) < (b) ? ((a) < (c) ? (a) : (c)) : ((b) < (c) ? (b) : (c)))
 
-__global__ void cuda_levenshtein(char *s1, char *s2, int len, int *column, int *gpu_column)
+__global__ void cuda_levenshtein(char *gpu_pattern, char *gpu_buf, int size_pattern, int n_bytes, int approx_factor, int *gpu_column, int *gpu_matches)
 {
     unsigned int x, y, lastdiag, olddiag;
 
     int i = blockIdx.x * blockDim.x + threadIdx.x;
 
-    for (y = 1; y <= len; y++)
+    gpu_column = &gpu_column[i * (size_pattern + 1)];
+    gpu_buf = &gpu_buf[i];
+
+    if (i < n_bytes)
     {
-        column[y] = y;
-    }
-    for (x = 1; x <= len; x++)
-    {
-        column[0] = x;
-        lastdiag = x - 1;
-        for (y = 1; y <= len; y++)
+        int distance = 0;
+        int size;
+        size = size_pattern;
+        if (n_bytes - i < size_pattern)
         {
-            olddiag = column[y];
-            column[y] = MIN3(
-                column[y] + 1,
-                column[y - 1] + 1,
-                lastdiag + (s1[y - 1] == s2[x - 1+i] ? 0 : 1));
-            lastdiag = olddiag;
+            size = n_bytes - i;
+        }
+
+        for (y = 1; y <= size; y++)
+        {
+            gpu_column[y] = y;
+        }
+        for (x = 1; x <= size; x++)
+        {
+            gpu_column[0] = x;
+            lastdiag = x - 1;
+            for (y = 1; y <= size; y++)
+            {
+                olddiag = gpu_column[y];
+                gpu_column[y] = MIN3(gpu_column[y] + 1, gpu_column[y - 1] + 1, lastdiag + (gpu_pattern[y - 1] == gpu_buf[x - 1] ? 0 : 1));
+                lastdiag = olddiag;
+            }
+        }
+        distance = gpu_column[size];
+
+        if (distance <= approx_factor)
+        {
+            gpu_matches[i] = 1;
+        }
+        else
+        {
+            gpu_matches[i] = 0;
         }
     }
-    printf("coucou");
-    gpu_column[i] = column[len];
 }
 
 int main(int argc, char **argv)
@@ -133,8 +153,7 @@ int main(int argc, char **argv)
     pattern = (char **)malloc(nb_patterns * sizeof(char *));
     if (pattern == NULL)
     {
-        fprintf(stderr,
-                "Unable to allocate array of pattern of size %d\n",
+        fprintf(stderr, "Unable to allocate array of pattern of size %d\n",
                 nb_patterns);
         return 1;
     }
@@ -186,52 +205,52 @@ int main(int argc, char **argv)
 
     /* Timer start */
     gettimeofday(&t1, NULL);
-    int blocksize = 1024;
-    int *gpu_column;
-    char *gpu_pattern;
-    char *gpu_buf;
+        int blocksize = 1024;
+        int nb_threads = min(blocksize,n_bytes) * ceil((n_bytes / (float)blocksize));
+        dim3 dimBlock(min(blocksize,n_bytes));
+        dim3 dimGrid(ceil((n_bytes / (float)blocksize)));
 
     for (i = 0; i < nb_patterns; i++)
     {
+
         int size_pattern = strlen(pattern[i]);
 
-        int *column;
+        int *nb_matches = (int *)malloc((n_bytes) * sizeof(int));
+
+        for (int j = 0; j < n_bytes; j++)
+        {
+            n_matches[i] = 0;
+        }
 
         n_matches[i] = 0;
 
-        column = (int *)malloc((size_pattern + 1) * sizeof(int));
-        if (column == NULL)
-        {
-            fprintf(stderr, "Error: unable to allocate memory for column (%ldB)\n",
-                    (size_pattern + 1) * sizeof(int));
-            return 1;
-        }
-        cudaMalloc(&gpu_column, (size_pattern + 1) * sizeof(int));
+        char *gpu_pattern;
+        char *gpu_buf;
+        int *gpu_matches;
+        int *gpu_column;
+
         cudaMalloc(&gpu_pattern, (size_pattern) * sizeof(char));
-        cudaMalloc(&gpu_buf, n_bytes * sizeof(char));
+        cudaMalloc(&gpu_buf, (n_bytes) * sizeof(char));
+        cudaMalloc(&gpu_matches, (n_bytes) * sizeof(int));
+        cudaMalloc(&gpu_column, nb_threads * (size_pattern + 1) * sizeof(int));
 
-        cudaMemcpy(gpu_column, column, (size_pattern + 1) * sizeof(int), cudaMemcpyHostToDevice);
-        cudaMemcpy(gpu_pattern, pattern[i], (size_pattern+1) * sizeof(char), cudaMemcpyHostToDevice);
-        cudaMemcpy(gpu_buf, buf, (n_bytes * n_bytes) * sizeof(char), cudaMemcpyHostToDevice);
+        cudaMemcpy(gpu_pattern, pattern[i], (size_pattern) * sizeof(char), cudaMemcpyHostToDevice);
+        cudaMemcpy(gpu_buf, buf, (n_bytes) * sizeof(char), cudaMemcpyHostToDevice);
+        cudaMemcpy(gpu_matches, nb_matches, (n_bytes) * sizeof(int), cudaMemcpyHostToDevice);
 
-        dim3 dimBlock(blocksize);
-        dim3 dimGrid(ceil((size_pattern + 1) * sizeof(char) / (int)blocksize));
+        cuda_levenshtein<<<dimGrid, dimBlock>>>(gpu_pattern, gpu_buf, size_pattern, n_bytes, approx_factor, gpu_column, gpu_matches);
 
-        cuda_levenshtein<<<dimGrid, dimBlock>>>(gpu_pattern, gpu_buf, size_pattern, column, gpu_column);
-        cudaDeviceSynchronize();
-        
-        printf(cudaGetErrorString(cudaPeekAtLastError()));
+        cudaMemcpy(nb_matches, gpu_matches, (n_bytes) * sizeof(int), cudaMemcpyDeviceToHost);
 
-        cudaMemcpy(column, gpu_column, (size_pattern + 1) * sizeof(int), cudaMemcpyDeviceToHost);
-        
-        if (column[i] <= approx_factor)
+        for (int j = 0; j < n_bytes; j++)
         {
-            n_matches[i]++;
+            n_matches[i] += nb_matches[j];
         }
-        free(column);
-        cudaFree(gpu_column);
-        cudaFree(gpu_buf);
+
         cudaFree(gpu_pattern);
+        cudaFree(gpu_buf);
+        cudaFree(gpu_matches);
+        cudaFree(gpu_column);
     }
 
     /* Timer stop */
@@ -247,8 +266,8 @@ int main(int argc, char **argv)
 
     for (i = 0; i < nb_patterns; i++)
     {
-        printf("Number of matches for pattern <%s>: %d\n",
-               pattern[i], n_matches[i]);
+        printf("Number of matches for pattern <%s>: %d\n", pattern[i],
+               n_matches[i]);
     }
 
     return 0;
