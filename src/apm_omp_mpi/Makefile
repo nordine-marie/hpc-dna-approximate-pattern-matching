@@ -1,5 +1,5 @@
 SRC_DIR=src
-HEADER_DIR=include
+HEADER_DIR=/usr/lib/x86_64-linux-gnu/openmpi/include
 OBJ_DIR=obj
 
 CC=gcc
