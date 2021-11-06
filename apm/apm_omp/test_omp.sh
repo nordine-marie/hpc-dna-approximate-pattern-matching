@@ -18,7 +18,7 @@ for i in {1..100}; do
 
     for pattern in ${patterns[*]}; do
         echo Pattern : $pattern
-        $script $distance $dna $patterns
+        $script $distance $dna $pattern
         echo "=============================================="
     done
 
