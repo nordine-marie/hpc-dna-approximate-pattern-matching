@@ -15,7 +15,7 @@ echo "OMP test" > out
 
 for i in {1..100}; do 
 
-    export OMP_NUM_THREADS=1
+    export OMP_NUM_THREADS=$i
     echo "OMP_NUM_THREADS = $i =========================" >> out
 
     for pattern in ${patterns[*]}; do
