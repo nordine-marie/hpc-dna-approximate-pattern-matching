@@ -19,7 +19,7 @@ for i in {1..100}; do
     echo "OMP_NUM_THREADS = $i =========================" >> out
 
     for pattern in ${patterns[*]}; do
-        $script $distance $dna $pattern | grep "APM done in" | awk '{ print $4 }' >> out
+        $script $distance $dna $pattern | grep "APM done in" | awk '{ printf $4 }' >> out
     done
 
 
