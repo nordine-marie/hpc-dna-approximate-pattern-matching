@@ -21,8 +21,6 @@ for i in {1..100}; do
         $script $distance $dna $patterns
         echo "=============================================="
     done
-    echo "Pattern : 5 five medium"
-    $script $distance $dna $five_medium
 
 
 done
