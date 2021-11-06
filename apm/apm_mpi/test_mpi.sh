@@ -1,5 +1,5 @@
 #!/bin/bash
-
+mpirun=/netfs/inf/trahay_f/mpich/bin/mpirun
 script=$1
 distance=$2
 dna=$3
@@ -11,15 +11,13 @@ large="AGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTT
 five_medium="'AGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAA AGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAG AGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAT AGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAGG AGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAAAAAGTTTTTTTTTTTTTTTTTTGGAAAAAAAATT'"
 patterns=($small $medium $large);
 
-for i in {1..100}; do 
-
-    export OMP_NUM_THREADS=$i
-
+for i in {1..260}; do 
+    echo $i MPI process
     for pattern in ${patterns[*]}; do
-        $script $distance $dna $pattern | grep "APM done in" | awk '{ printf $4 }' >> out_omp
-        printf "\t" >> out_omp
+        echo $pattern
+        $mpirun -np $i --hostfile ~/hosts $script $distance $dna $pattern | grep "APM done in" | awk '{ printf $4 }' >> out_mpi
+        printf "\t" >> out_mpi
     done
-    printf "\n" >> out_omp
-
+    printf "\n" >> out_mpi
 
 done
