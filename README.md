@@ -1,6 +1,8 @@
+
 # High Performance Computing<br>DNA Approximate Pattern Matching (APM)
 
-***Contributors :***
+![](/Users/LycaN/NoSync/TSP/3A/HP/hpc-dna-approximate-pattern-matching/plots/omp_mpi_large_pattern.png) 
+***Contributors :***  
 *SAVES Marion & MARIE Nordine* students at TELECOM SudParis
 
 ## Compile :
