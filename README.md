@@ -96,9 +96,9 @@ i5-8400 CPU
 
 **Small Pattern :** 32 characters
 
-**Medium Pattern:** 96 characters (3 fois small)
+**Medium Pattern:** 96 characters (3 times small)
 
-**Large Pattern :** 224 characters (7 fois small)
+**Large Pattern :** 224 characters (7 times small)
 
 
 
