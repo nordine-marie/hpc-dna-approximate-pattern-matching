@@ -1,7 +1,7 @@
 
 # High Performance Computing<br>DNA Approximate Pattern Matching (APM)
 
-![OpenMP MPI APM Speed up](plots/omp_mpi_large_pattern_dark.png) 
+<img src="plots/omp_mpi_large_pattern_dark.png" width=50%>
 
 ***Contributors :***  
 *SAVES Marion & MARIE Nordine* students at TELECOM SudParis
