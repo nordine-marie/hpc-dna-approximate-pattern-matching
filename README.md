@@ -69,6 +69,8 @@ at `apm/apm_omp/src/` :
 - **Trace visualization** in `trace/` 
 - **Speed up and efficiency plots** in `plots/`
 - [**Human DNA files**](http://hgdownload.cse.ucsc.edu/goldenPath/hg38/chromosomes/)
+- [**EZtrace**](https://eztrace.gitlab.io/eztrace/) was use to generate traces and [**ViTE**](https://solverstack.gitlabpages.inria.fr/vite/) to visualize them.
+- Our **Jupyter notebook** `plot_speedup.ipynb` was used to plot the graphs present at `plots/`
 
 All the tests have been done with the following hardware & configuration :
 
