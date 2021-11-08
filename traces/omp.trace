@@ -1,0 +1,512 @@
+%EventDef PajeDefineContainerType 0
+% Name string
+% Type string
+% Alias string
+%EndEventDef
+%EventDef PajeDefineStateType 1
+% Name string
+% Type string
+% Alias string
+%EndEventDef
+%EventDef PajeDefineEventType 2
+% Name string
+% Type string
+% Alias string
+%EndEventDef
+%EventDef PajeDefineVariableType 3
+% Name string
+% Type string
+% Color color
+% Alias string
+%EndEventDef
+%EventDef PajeDefineLinkType 4
+% Name string
+% Type string
+% StartContainerType string
+% EndContainerType string
+% Alias string
+%EndEventDef
+%EventDef PajeDefineEntityValue 5
+% Type string
+% Name string
+% Color color
+% Alias string
+%EndEventDef
+%EventDef PajeCreateContainer 7
+% Time date
+% Name string
+% Type string
+% Container string
+% Alias string
+%EndEventDef
+%EventDef PajeDestroyContainer 8
+% Time date
+% Name string
+% Type string
+%EndEventDef
+%EventDef PajeSetState 10
+% Time date
+% Type string
+% Container string
+% Value string
+%EndEventDef
+%EventDef PajePushState 11
+% Time date
+% Type string
+% Container string
+% Value string
+%EndEventDef
+%EventDef PajePushState 14
+% Time date
+% Type string
+% Container string
+% Value string
+% Extra string
+%EndEventDef
+%EventDef PajePopState 12
+% Time date
+% Type string
+% Container string
+%EndEventDef
+%EventDef PajeResetState 13
+% Time date
+% Type string
+% Container string
+%EndEventDef
+%EventDef PajeNewEvent 20
+% Time date
+% Type string
+% Container string
+% Value string
+%EndEventDef
+%EventDef PajeSetVariable 30
+% Time date
+% Type string
+% Container string
+% Value double
+%EndEventDef
+%EventDef PajeAddVariable 31
+% Time date
+% Type string
+% Container string
+% Value double
+%EndEventDef
+%EventDef PajeSubVariable 32
+% Time date
+% Type string
+% Container string
+% Value double
+%EndEventDef
+%EventDef PajeStartLink 40
+% Time date
+% Type string
+% Container string
+% StartContainer string
+% Value string
+% Key string
+%EndEventDef
+%EventDef PajeEndLink 41
+% Time date
+% Type string
+% Container string
+% EndContainer string
+% Value string
+% Key string
+%EndEventDef
+0 "Program" "0" "CT_Program"
+0 "Process" "CT_Program" "CT_Process"
+0 "Thread" "CT_Process" "CT_Thread"
+1 "Program state" "CT_Program" "ST_Program"
+1 "Process state" "CT_Process" "ST_Process"
+1 "Thread state" "CT_Thread" "ST_Thread"
+1 "User state" "CT_Thread" "ST_User"
+5 "ST_Thread" "EZTrace Flush" "1.0 1.0 1.0" "STV_FLUSH"
+5 "ST_Thread" "Blocked" "1.0 0.0 0.0" "STV_Blocked"
+5 "ST_Thread" "Working" "0.0 0.0 1.0" "STV_Working"
+5 "ST_Thread" "Critical Section" "0.0 1.0 0.0" "STV_Critical"
+5 "ST_User" "User Event" "0.0 1.0 0.0" "STV_User_Event_Green"
+5 "ST_User" "User Event" "1.0 0.0 0.0" "STV_User_Event_Red"
+5 "ST_User" "User Event" "0.1 0.5 0.8" "STV_User_Event_Blue"
+5 "ST_User" "User Event" "1.0 1.0 0.0" "STV_User_Event_Yellow"
+5 "ST_User" "User Event" "1.0 0.0 1.0" "STV_User_Event_Pink"
+5 "ST_Thread" "EZTrace synchronization" "1.0 1.0 1.0" "STV_EZTRACE_SYNC"
+2 "User Event" "CT_Thread" "E_UserEvent"
+2 "SIGNAL Received" "CT_Thread" "E_SigSegv"
+3 "Current CPU" "CT_Thread" "0 0 0" "V_CURCPU"
+5 "ST_Thread" "stdio_read" "0.0 0.0 0.0" "stdio_read"
+5 "ST_Thread" "stdio_pread" "0.0 0.0 0.0" "stdio_pread"
+5 "ST_Thread" "stdio_readv" "0.0 0.0 0.0" "stdio_readv"
+5 "ST_Thread" "stdio_fread" "0.0 0.0 0.0" "stdio_fread"
+5 "ST_Thread" "stdio_write" "0.0 0.0 0.0" "stdio_write"
+5 "ST_Thread" "stdio_pwrite" "0.0 0.0 0.0" "stdio_pwrite"
+5 "ST_Thread" "stdio_writev" "0.0 0.0 0.0" "stdio_writev"
+5 "ST_Thread" "stdio_fwrite" "0.0 0.0 0.0" "stdio_fwrite"
+5 "ST_Thread" "stdio_select" "0.0 0.0 0.0" "stdio_select"
+5 "ST_Thread" "stdio_pselect" "0.0 0.0 0.0" "stdio_pselect"
+5 "ST_Thread" "stdio_lseek" "0.0 0.0 0.0" "stdio_lseek"
+5 "ST_Thread" "stdio_poll" "0.0 0.0 0.0" "stdio_poll"
+5 "ST_Thread" "stdio_ppoll" "0.0 0.0 0.0" "stdio_ppoll"
+2 "SemPost" "CT_Thread" "E_SemPost"
+2 "SemWait done" "CT_Thread" "E_SemWait_Done"
+2 "Mutex Lock" "CT_Thread" "E_Mutex_Lock"
+2 "Mutex Unlock" "CT_Thread" "E_Mutex_Unlock"
+2 "Cond Signal" "CT_Thread" "E_CondSignal"
+2 "Waiting for a lock" "CT_Thread" "E_LockStart"
+2 "Lock acquired" "CT_Thread" "E_LockStop"
+5 "ST_Thread" "Blocked on a semaphore" "1.0 0.0 0.0" "STV_Blocked_sem"
+5 "ST_Thread" "Blocked on a spinlock" "1.0 0.0 0.0" "STV_Blocked_spin"
+5 "ST_Thread" "Blocked on a mutex" "1.0 0.0 0.0" "STV_Blocked_mutex"
+5 "ST_Thread" "Blocked on a condition" "1.0 0.0 0.0" "STV_Blocked_condition"
+5 "ST_Thread" "Blocked on a rwlock" "1.0 0.0 0.0" "STV_Blocked_rwlock"
+5 "ST_Thread" "Blocked on a barrier" "1.0 0.0 0.0" "STV_Blocked_barrier"
+5 "ST_Thread" "Critical Section (semaphore)" "0.0 1.0 0.0" "STV_Critical_sem"
+5 "ST_Thread" "Critical Section (spinlock)" "0.0 1.0 0.0" "STV_Critical_spin"
+5 "ST_Thread" "Critical Section (mutex)" "0.0 1.0 0.0" "STV_Critical_mutex"
+5 "ST_Thread" "Critical Section (condition)" "0.0 1.0 0.0" "STV_Critical_condition"
+5 "ST_Thread" "Critical Section (rwlock)" "0.0 1.0 0.0" "STV_Critical_rwlock"
+4 "OpenMP Parallel Section" "CT_Program" "CT_Thread" "CT_Thread" "GOMP_Section_Link"
+5 "ST_Thread" "GOMP_Section_State" "1.0 0.0 1.0" "GOMP_Section_State"
+5 "ST_Thread" "GOMP_Critical" "0.0 1.0 0.0" "GOMP_Critical"
+5 "ST_Thread" "GOMP_Atomic" "0.0 1.0 0.0" "GOMP_Atomic"
+5 "ST_Thread" "GOMP_Barrier" "1.0 0.6 0.0" "GOMP_Barrier"
+5 "ST_Thread" "GOMP_Implicit_Barrier" "1.0 0.0 0.0" "GOMP_Implicit_Barrier"
+5 "ST_Thread" "GOMP_For" "0.8 0.8 0.8" "GOMP_For"
+5 "ST_Thread" "GOMP_Master" "1.0 1.0 1.0" "GOMP_Master"
+5 "ST_Thread" "Blocked on an OpenMP lock" "1.0 0.0 0.0" "STV_GOMP_Lock"
+5 "ST_Thread" "Holding an OpenMP lock" "0.0 1.0 0.0" "STV_GOMP_Locked"
+5 "ST_Thread" "Blocked on an OpenMP nested lock" "1.0 0.0 0.0" "STV_GOMP_NLock"
+5 "ST_Thread" "Holding an OpenMP nested lock" "0.0 1.0 0.0" "STV_GOMP_NLocked"
+5 "ST_Thread" "GOMP_TaskWait" "1.0 0.6 0.0" "GOMP_TaskWait"
+5 "ST_Thread" "GOMP_Task" "1.0 1.0 1.0" "GOMP_Task"
+5 "ST_Thread" "GOMP_Untied_Task" "0.0 1.0 1.0" "GOMP_Untied_Task"
+5 "ST_Thread" "Creating an OpenMP Task" "0.3 0.4 0.1" "GOMP_Task_Create"
+5 "ST_Thread" "Creating an OpenMP Task" "0.1 0.5 0.8" "GOMP_Untied_Task_Create"
+5 "ST_Thread" "Sending" "1.0 0.6 0.0" "STV_MPI_Send"
+5 "ST_Thread" "MPI_Isend" "1.0 0.6 0.0" "STV_MPI_Isend"
+5 "ST_Thread" "MPI_Ibsend" "1.0 0.6 0.0" "STV_MPI_Ibsend"
+5 "ST_Thread" "MPI_Issend" "1.0 0.6 0.0" "STV_MPI_Issend"
+5 "ST_Thread" "MPI_Irsend" "1.0 0.6 0.0" "STV_MPI_Irsend"
+5 "ST_Thread" "SendRecv" "1.0 0.6 0.0" "STV_MPI_Sendrecv"
+5 "ST_Thread" "Receiving" "0.6 0.1 0.9" "STV_MPI_Recv"
+5 "ST_Thread" "MPI_Irecv" "0.6 0.1 0.9" "STV_MPI_Irecv"
+5 "ST_Thread" "MPI_Wait" "1.0 0.0 0.0" "STV_MPI_Wait"
+5 "ST_Thread" "MPI_Barrier" "1.0 0.0 1.0" "STV_MPI_Barrier"
+5 "ST_Thread" "MPI_BCast" "1.0 0.0 1.0" "STV_MPI_BCast"
+5 "ST_Thread" "MPI_Gather" "1.0 0.0 1.0" "STV_MPI_Gather"
+5 "ST_Thread" "MPI_Scatter" "1.0 0.0 1.0" "STV_MPI_Scatter"
+5 "ST_Thread" "MPI_Allgather" "1.0 0.0 1.0" "STV_MPI_Allgather"
+5 "ST_Thread" "MPI_Alltoall" "1.0 0.0 1.0" "STV_MPI_Alltoall"
+5 "ST_Thread" "MPI_Reduce" "1.0 0.0 1.0" "STV_MPI_Reduce"
+5 "ST_Thread" "MPI_Allreduce" "1.0 0.0 1.0" "STV_MPI_Allreduce"
+5 "ST_Thread" "MPI_Reduce_scatter" "1.0 0.0 1.0" "STV_MPI_reduce_scatter"
+5 "ST_Thread" "MPI_Scan" "1.0 0.0 1.0" "STV_MPI_Scan"
+5 "ST_Thread" "MPI_Ibarrier" "1.0 0.0 1.0" "STV_MPI_Ibarrier"
+5 "ST_Thread" "MPI_Ibcast" "1.0 0.0 1.0" "STV_MPI_Ibcast"
+5 "ST_Thread" "MPI_Igather" "1.0 0.0 1.0" "STV_MPI_Igather"
+5 "ST_Thread" "MPI_Iscatter" "1.0 0.0 1.0" "STV_MPI_Iscatter"
+5 "ST_Thread" "MPI_Iallgather" "1.0 0.0 1.0" "STV_MPI_Iallgather"
+5 "ST_Thread" "MPI_Ialltoall" "1.0 0.0 1.0" "STV_MPI_Ialltoall"
+5 "ST_Thread" "MPI_Ireduce" "1.0 0.0 1.0" "STV_MPI_Ireduce"
+5 "ST_Thread" "MPI_Iallreduce" "1.0 0.0 1.0" "STV_MPI_Iallreduce"
+5 "ST_Thread" "MPI_Ireduce_scatter" "1.0 0.0 1.0" "STV_MPI_Ireduce_scatter"
+5 "ST_Thread" "MPI_Iscan" "1.0 0.0 1.0" "STV_MPI_Iscan"
+5 "ST_Thread" "MPI_Probe" "0.6 0.1 0.9" "STV_MPI_Probe"
+4 "MPI collective communication" "CT_Program" "CT_Thread" "CT_Thread" "L_MPI_Coll"
+4 "MPI point to point communication" "CT_Program" "CT_Thread" "CT_Thread" "L_MPI_P2P"
+4 "MPI SPAWN" "CT_Program" "CT_Thread" "CT_Thread" "L_MPI_SPAWN"
+2 "MPI Send" "CT_Thread" "E_MPI_CommSend"
+2 "MPI Recv" "CT_Thread" "E_MPI_CommRecv"
+2 "End of an MPI communication" "CT_Thread" "E_MPI_EndComm"
+2 "MPI_Probe" "CT_Thread" "E_MPI_Probe_success"
+2 "MPI_IProbe success" "CT_Thread" "E_MPI_Iprobe_success"
+2 "MPI_IProbe failed" "CT_Thread" "E_MPI_Iprobe_failed"
+3 "Memory used" "CT_Process" "0 0 0" "V_Mem"
+7 0.0000000000000e+00 "Program" "CT_Program" 0 "C_Prog"
+7 0.0000000000000e+00 "P#0" "CT_Process" "C_Prog" "P#0"
+7 0.0000000000000e+00 "P#0_T#2494903616" "CT_Thread" "P#0" "P#0_T#2494903616"
+10 0.0000000000000e+00 "ST_Thread" "P#0_T#2494903616" "STV_Working"
+40 3.9194619655609e+00 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#0" "0_0_0"
+40 3.9194619655609e+00 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#3" "0_0_3"
+40 3.9194619655609e+00 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#2" "0_0_2"
+40 3.9194619655609e+00 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#4" "0_0_4"
+40 3.9194619655609e+00 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#5" "0_0_5"
+40 3.9194619655609e+00 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#1" "0_0_1"
+11 3.9309850000000e+00 "ST_Thread" "P#0_T#2494903616" "STV_Blocked"
+12 4.0346150000000e+00 "ST_Thread" "P#0_T#2494903616"
+11 4.0356780000000e+00 "ST_Thread" "P#0_T#2494903616" "STV_Blocked"
+12 4.1046850000000e+00 "ST_Thread" "P#0_T#2494903616"
+11 4.1053240000000e+00 "ST_Thread" "P#0_T#2494903616" "STV_Blocked"
+12 4.1668100000000e+00 "ST_Thread" "P#0_T#2494903616"
+11 4.1675550000000e+00 "ST_Thread" "P#0_T#2494903616" "STV_Blocked"
+12 2.0958708000000e+01 "ST_Thread" "P#0_T#2494903616"
+11 2.0961808000000e+01 "ST_Thread" "P#0_T#2494903616" "STV_Blocked"
+7 2.1106614000000e+01 "P#0_T#2477180672" "CT_Thread" "P#0" "P#0_T#2477180672"
+10 2.1106614000000e+01 "ST_Thread" "P#0_T#2477180672" "STV_Working"
+12 3.6517133000000e+01 "ST_Thread" "P#0_T#2494903616"
+7 3.6576466000000e+01 "P#0_T#2468787968" "CT_Thread" "P#0" "P#0_T#2468787968"
+10 3.6576466000000e+01 "ST_Thread" "P#0_T#2468787968" "STV_Working"
+7 4.5636612000000e+01 "P#0_T#2460395264" "CT_Thread" "P#0" "P#0_T#2460395264"
+10 4.5636612000000e+01 "ST_Thread" "P#0_T#2460395264" "STV_Working"
+7 5.2289010000000e+01 "P#0_T#2452002560" "CT_Thread" "P#0" "P#0_T#2452002560"
+10 5.2289010000000e+01 "ST_Thread" "P#0_T#2452002560" "STV_Working"
+7 5.7815581000000e+01 "P#0_T#2426828544" "CT_Thread" "P#0" "P#0_T#2426828544"
+10 5.7815581000000e+01 "ST_Thread" "P#0_T#2426828544" "STV_Working"
+41 5.7822801000000e+01 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#0" "0_0_0"
+11 5.7822801000000e+01 "ST_Thread" "P#0_T#2494903616" "GOMP_Section_State"
+41 5.7822856000000e+01 "GOMP_Section_Link" "C_Prog" "P#0_T#2460395264" "p#0_section#0_thread#3" "0_0_3"
+11 5.7822856000000e+01 "ST_Thread" "P#0_T#2460395264" "GOMP_Section_State"
+41 5.7822858000000e+01 "GOMP_Section_Link" "C_Prog" "P#0_T#2468787968" "p#0_section#0_thread#2" "0_0_2"
+11 5.7822858000000e+01 "ST_Thread" "P#0_T#2468787968" "GOMP_Section_State"
+41 5.7822992000000e+01 "GOMP_Section_Link" "C_Prog" "P#0_T#2452002560" "p#0_section#0_thread#4" "0_0_4"
+11 5.7822992000000e+01 "ST_Thread" "P#0_T#2452002560" "GOMP_Section_State"
+11 5.7823069000000e+01 "ST_Thread" "P#0_T#2494903616" "GOMP_For"
+11 5.7823075000000e+01 "ST_Thread" "P#0_T#2460395264" "GOMP_For"
+11 5.7823182000000e+01 "ST_Thread" "P#0_T#2468787968" "GOMP_For"
+11 5.7823302000000e+01 "ST_Thread" "P#0_T#2452002560" "GOMP_For"
+41 5.7825274000000e+01 "GOMP_Section_Link" "C_Prog" "P#0_T#2426828544" "p#0_section#0_thread#5" "0_0_5"
+11 5.7825274000000e+01 "ST_Thread" "P#0_T#2426828544" "GOMP_Section_State"
+11 5.7825497000000e+01 "ST_Thread" "P#0_T#2426828544" "GOMP_For"
+41 5.7860021000000e+01 "GOMP_Section_Link" "C_Prog" "P#0_T#2477180672" "p#0_section#0_thread#1" "0_0_1"
+11 5.7860021000000e+01 "ST_Thread" "P#0_T#2477180672" "GOMP_Section_State"
+11 5.7860279000000e+01 "ST_Thread" "P#0_T#2477180672" "GOMP_For"
+11 1.1591133611000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_Implicit_Barrier"
+11 1.1591133624000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_Implicit_Barrier"
+11 1.1591154636000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_Implicit_Barrier"
+11 1.1591160595000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_Implicit_Barrier"
+11 1.1600844385000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_Implicit_Barrier"
+11 1.1603814972000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_Implicit_Barrier"
+12 1.1603815356000e+04 "ST_Thread" "P#0_T#2494903616"
+12 1.1603815479000e+04 "ST_Thread" "P#0_T#2494903616"
+40 1.1603815816000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#0" "0_0_0_end"
+12 1.1603815816000e+04 "ST_Thread" "P#0_T#2494903616"
+12 1.1603820553000e+04 "ST_Thread" "P#0_T#2477180672"
+12 1.1603820693000e+04 "ST_Thread" "P#0_T#2477180672"
+40 1.1603820838000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2477180672" "p#0_section#0_thread#1" "0_0_1_end"
+12 1.1603820838000e+04 "ST_Thread" "P#0_T#2477180672"
+12 1.1603837110000e+04 "ST_Thread" "P#0_T#2460395264"
+12 1.1603837284000e+04 "ST_Thread" "P#0_T#2460395264"
+40 1.1603837476000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2460395264" "p#0_section#0_thread#3" "0_0_3_end"
+12 1.1603837476000e+04 "ST_Thread" "P#0_T#2460395264"
+12 1.1603842821000e+04 "ST_Thread" "P#0_T#2468787968"
+12 1.1603843092000e+04 "ST_Thread" "P#0_T#2468787968"
+40 1.1603843304000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2468787968" "p#0_section#0_thread#2" "0_0_2_end"
+12 1.1603843304000e+04 "ST_Thread" "P#0_T#2468787968"
+12 1.1603857620000e+04 "ST_Thread" "P#0_T#2452002560"
+12 1.1603857838000e+04 "ST_Thread" "P#0_T#2452002560"
+40 1.1603858295000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2452002560" "p#0_section#0_thread#4" "0_0_4_end"
+12 1.1603858295000e+04 "ST_Thread" "P#0_T#2452002560"
+12 1.1604502767000e+04 "ST_Thread" "P#0_T#2426828544"
+12 1.1604503010000e+04 "ST_Thread" "P#0_T#2426828544"
+40 1.1604503150000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2426828544" "p#0_section#0_thread#5" "0_0_5_end"
+41 1.1604503150000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#0" "0_0_0_end"
+41 1.1604503150000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#1" "0_0_1_end"
+41 1.1604503150000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#2" "0_0_2_end"
+41 1.1604503150000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#3" "0_0_3_end"
+41 1.1604503150000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#4" "0_0_4_end"
+41 1.1604503150000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#0_thread#5" "0_0_5_end"
+12 1.1604503150000e+04 "ST_Thread" "P#0_T#2426828544"
+40 1.1604504882812e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#1" "0_1_1"
+40 1.1604504882812e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#5" "0_1_5"
+40 1.1604504882812e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#3" "0_1_3"
+40 1.1604504882812e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#2" "0_1_2"
+40 1.1604504882812e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#4" "0_1_4"
+40 1.1604504882812e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#0" "0_1_0"
+41 1.1604505799000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2477180672" "p#0_section#1_thread#1" "0_1_1"
+11 1.1604505799000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_Section_State"
+41 1.1604505799000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2426828544" "p#0_section#1_thread#5" "0_1_5"
+11 1.1604505799000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_Section_State"
+41 1.1604505845000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2460395264" "p#0_section#1_thread#3" "0_1_3"
+11 1.1604505845000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_Section_State"
+41 1.1604505859000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2468787968" "p#0_section#1_thread#2" "0_1_2"
+11 1.1604505859000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_Section_State"
+41 1.1604505874000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2452002560" "p#0_section#1_thread#4" "0_1_4"
+11 1.1604505874000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_Section_State"
+11 1.1604505950000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_For"
+11 1.1604505982000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_For"
+11 1.1604505983000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_For"
+11 1.1604505990000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_For"
+11 1.1604506027000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_For"
+41 1.1604506676000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#0" "0_1_0"
+11 1.1604506676000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_Section_State"
+11 1.1604506790000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_For"
+11 2.3211724150000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_Implicit_Barrier"
+11 2.3211724175000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_Implicit_Barrier"
+11 2.3211831156000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_Implicit_Barrier"
+11 2.3211836806000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_Implicit_Barrier"
+11 2.3211848798000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_Implicit_Barrier"
+11 2.3282803202000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_Implicit_Barrier"
+12 2.3282808851000e+04 "ST_Thread" "P#0_T#2460395264"
+12 2.3282809082000e+04 "ST_Thread" "P#0_T#2460395264"
+40 2.3282809310000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2460395264" "p#0_section#1_thread#3" "0_1_3_end"
+12 2.3282809310000e+04 "ST_Thread" "P#0_T#2460395264"
+12 2.3282809746000e+04 "ST_Thread" "P#0_T#2494903616"
+12 2.3282809928000e+04 "ST_Thread" "P#0_T#2494903616"
+40 2.3282810409000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#0" "0_1_0_end"
+12 2.3282810409000e+04 "ST_Thread" "P#0_T#2494903616"
+12 2.3282845979000e+04 "ST_Thread" "P#0_T#2477180672"
+12 2.3282846150000e+04 "ST_Thread" "P#0_T#2477180672"
+40 2.3282846348000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2477180672" "p#0_section#1_thread#1" "0_1_1_end"
+12 2.3282846348000e+04 "ST_Thread" "P#0_T#2477180672"
+12 2.3282846875000e+04 "ST_Thread" "P#0_T#2426828544"
+12 2.3282847142000e+04 "ST_Thread" "P#0_T#2426828544"
+40 2.3282847354000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2426828544" "p#0_section#1_thread#5" "0_1_5_end"
+12 2.3282847354000e+04 "ST_Thread" "P#0_T#2426828544"
+12 2.3282873153000e+04 "ST_Thread" "P#0_T#2452002560"
+12 2.3282873386000e+04 "ST_Thread" "P#0_T#2452002560"
+40 2.3282873603000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2452002560" "p#0_section#1_thread#4" "0_1_4_end"
+12 2.3282873603000e+04 "ST_Thread" "P#0_T#2452002560"
+12 2.3282883708000e+04 "ST_Thread" "P#0_T#2468787968"
+12 2.3282883972000e+04 "ST_Thread" "P#0_T#2468787968"
+40 2.3282884187000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2468787968" "p#0_section#1_thread#2" "0_1_2_end"
+41 2.3282884187000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#0" "0_1_0_end"
+41 2.3282884187000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#1" "0_1_1_end"
+41 2.3282884187000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#2" "0_1_2_end"
+41 2.3282884187000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#3" "0_1_3_end"
+41 2.3282884187000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#4" "0_1_4_end"
+41 2.3282884187000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#1_thread#5" "0_1_5_end"
+12 2.3282884187000e+04 "ST_Thread" "P#0_T#2468787968"
+40 2.3282884765625e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#5" "0_2_5"
+40 2.3282884765625e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#3" "0_2_3"
+40 2.3282884765625e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#1" "0_2_1"
+40 2.3282884765625e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#2" "0_2_2"
+40 2.3282884765625e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#4" "0_2_4"
+40 2.3282884765625e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#0" "0_2_0"
+41 2.3282886746000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2426828544" "p#0_section#2_thread#5" "0_2_5"
+11 2.3282886746000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_Section_State"
+41 2.3282886766000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2460395264" "p#0_section#2_thread#3" "0_2_3"
+11 2.3282886766000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_Section_State"
+41 2.3282886784000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2477180672" "p#0_section#2_thread#1" "0_2_1"
+11 2.3282886784000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_Section_State"
+41 2.3282886799000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2468787968" "p#0_section#2_thread#2" "0_2_2"
+11 2.3282886799000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_Section_State"
+41 2.3282886813000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2452002560" "p#0_section#2_thread#4" "0_2_4"
+11 2.3282886813000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_Section_State"
+11 2.3282886920000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_For"
+11 2.3282886936000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_For"
+11 2.3282886944000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_For"
+11 2.3282886949000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_For"
+11 2.3282886972000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_For"
+41 2.3282887337000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#0" "0_2_0"
+11 2.3282887337000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_Section_State"
+11 2.3282887453000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_For"
+11 3.4902887872000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_Implicit_Barrier"
+11 3.4902887925000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_Implicit_Barrier"
+11 3.4902888092000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_Implicit_Barrier"
+11 3.4902910064000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_Implicit_Barrier"
+11 3.4902948662000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_Implicit_Barrier"
+11 3.4978620398000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_Implicit_Barrier"
+12 3.4978627170000e+04 "ST_Thread" "P#0_T#2460395264"
+12 3.4978627374000e+04 "ST_Thread" "P#0_T#2460395264"
+40 3.4978627687000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2460395264" "p#0_section#2_thread#3" "0_2_3_end"
+12 3.4978627687000e+04 "ST_Thread" "P#0_T#2460395264"
+12 3.4978661209000e+04 "ST_Thread" "P#0_T#2426828544"
+12 3.4978661463000e+04 "ST_Thread" "P#0_T#2426828544"
+40 3.4978661698000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2426828544" "p#0_section#2_thread#5" "0_2_5_end"
+12 3.4978661698000e+04 "ST_Thread" "P#0_T#2426828544"
+12 3.4978693913000e+04 "ST_Thread" "P#0_T#2494903616"
+12 3.4978694016000e+04 "ST_Thread" "P#0_T#2468787968"
+12 3.4978694125000e+04 "ST_Thread" "P#0_T#2494903616"
+12 3.4978694278000e+04 "ST_Thread" "P#0_T#2468787968"
+40 3.4978694330000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#0" "0_2_0_end"
+12 3.4978694330000e+04 "ST_Thread" "P#0_T#2494903616"
+40 3.4978694446000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2468787968" "p#0_section#2_thread#2" "0_2_2_end"
+12 3.4978694446000e+04 "ST_Thread" "P#0_T#2468787968"
+12 3.4978694968000e+04 "ST_Thread" "P#0_T#2477180672"
+12 3.4978695090000e+04 "ST_Thread" "P#0_T#2452002560"
+12 3.4978695172000e+04 "ST_Thread" "P#0_T#2477180672"
+12 3.4978695285000e+04 "ST_Thread" "P#0_T#2452002560"
+40 3.4978695312500e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#5" "0_3_5"
+40 3.4978695312500e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#3" "0_3_3"
+40 3.4978695312500e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#2" "0_3_2"
+40 3.4978695312500e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#1" "0_3_1"
+40 3.4978695312500e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#4" "0_3_4"
+40 3.4978695312500e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#0" "0_3_0"
+40 3.4978695734000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2477180672" "p#0_section#2_thread#1" "0_2_1_end"
+12 3.4978695734000e+04 "ST_Thread" "P#0_T#2477180672"
+40 3.4978695745000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2452002560" "p#0_section#2_thread#4" "0_2_4_end"
+41 3.4978695745000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#0" "0_2_0_end"
+41 3.4978695745000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#1" "0_2_1_end"
+41 3.4978695745000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#2" "0_2_2_end"
+41 3.4978695745000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#3" "0_2_3_end"
+41 3.4978695745000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#4" "0_2_4_end"
+41 3.4978695745000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#2_thread#5" "0_2_5_end"
+12 3.4978695745000e+04 "ST_Thread" "P#0_T#2452002560"
+41 3.4978698104000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2426828544" "p#0_section#3_thread#5" "0_3_5"
+11 3.4978698104000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_Section_State"
+41 3.4978698121000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2460395264" "p#0_section#3_thread#3" "0_3_3"
+11 3.4978698121000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_Section_State"
+41 3.4978698150000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2468787968" "p#0_section#3_thread#2" "0_3_2"
+11 3.4978698150000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_Section_State"
+41 3.4978698176000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2477180672" "p#0_section#3_thread#1" "0_3_1"
+11 3.4978698176000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_Section_State"
+11 3.4978698210000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_For"
+41 3.4978698217000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2452002560" "p#0_section#3_thread#4" "0_3_4"
+11 3.4978698217000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_Section_State"
+11 3.4978698251000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_For"
+11 3.4978698273000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_For"
+11 3.4978698328000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_For"
+11 3.4978698366000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_For"
+41 3.4978698785000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#0" "0_3_0"
+11 3.4978698785000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_Section_State"
+11 3.4978698885000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_For"
+11 4.6756869369000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_Implicit_Barrier"
+11 4.6756869423000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_Implicit_Barrier"
+11 4.6756869428000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_Implicit_Barrier"
+11 4.6756873106000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_Implicit_Barrier"
+11 4.6756885501000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_Implicit_Barrier"
+11 4.6756888380000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_Implicit_Barrier"
+12 4.6756888769000e+04 "ST_Thread" "P#0_T#2468787968"
+12 4.6756888801000e+04 "ST_Thread" "P#0_T#2494903616"
+12 4.6756888814000e+04 "ST_Thread" "P#0_T#2426828544"
+12 4.6756888842000e+04 "ST_Thread" "P#0_T#2460395264"
+12 4.6756888929000e+04 "ST_Thread" "P#0_T#2452002560"
+12 4.6756888991000e+04 "ST_Thread" "P#0_T#2494903616"
+12 4.6756889007000e+04 "ST_Thread" "P#0_T#2460395264"
+12 4.6756889025000e+04 "ST_Thread" "P#0_T#2468787968"
+12 4.6756889030000e+04 "ST_Thread" "P#0_T#2426828544"
+12 4.6756889059000e+04 "ST_Thread" "P#0_T#2452002560"
+40 4.6756889206000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2460395264" "p#0_section#3_thread#3" "0_3_3_end"
+12 4.6756889206000e+04 "ST_Thread" "P#0_T#2460395264"
+40 4.6756889216000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#0" "0_3_0_end"
+12 4.6756889216000e+04 "ST_Thread" "P#0_T#2494903616"
+40 4.6756889226000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2468787968" "p#0_section#3_thread#2" "0_3_2_end"
+12 4.6756889226000e+04 "ST_Thread" "P#0_T#2468787968"
+40 4.6756889239000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2452002560" "p#0_section#3_thread#4" "0_3_4_end"
+12 4.6756889239000e+04 "ST_Thread" "P#0_T#2452002560"
+40 4.6756889249000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2426828544" "p#0_section#3_thread#5" "0_3_5_end"
+12 4.6756889249000e+04 "ST_Thread" "P#0_T#2426828544"
+12 4.6756889432000e+04 "ST_Thread" "P#0_T#2477180672"
+12 4.6756889576000e+04 "ST_Thread" "P#0_T#2477180672"
+40 4.6756889715000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2477180672" "p#0_section#3_thread#1" "0_3_1_end"
+41 4.6756889715000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#0" "0_3_0_end"
+41 4.6756889715000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#1" "0_3_1_end"
+41 4.6756889715000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#2" "0_3_2_end"
+41 4.6756889715000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#3" "0_3_3_end"
+41 4.6756889715000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#4" "0_3_4_end"
+41 4.6756889715000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#3_thread#5" "0_3_5_end"
+12 4.6756889715000e+04 "ST_Thread" "P#0_T#2477180672"
+40 4.6756890625000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#4_thread#3" "0_4_3"
+40 4.6756890625000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#4_thread#5" "0_4_5"
+40 4.6756890625000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#4_thread#2" "0_4_2"
+40 4.6756890625000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#4_thread#4" "0_4_4"
+40 4.6756890625000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#4_thread#1" "0_4_1"
+40 4.6756890625000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#4_thread#0" "0_4_0"
+41 4.6756892469000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2460395264" "p#0_section#4_thread#3" "0_4_3"
+11 4.6756892469000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_Section_State"
+41 4.6756892484000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2426828544" "p#0_section#4_thread#5" "0_4_5"
+11 4.6756892484000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_Section_State"
+41 4.6756892487000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2468787968" "p#0_section#4_thread#2" "0_4_2"
+11 4.6756892487000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_Section_State"
+41 4.6756892551000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2452002560" "p#0_section#4_thread#4" "0_4_4"
+11 4.6756892551000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_Section_State"
+41 4.6756892561000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2477180672" "p#0_section#4_thread#1" "0_4_1"
+11 4.6756892561000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_Section_State"
+11 4.6756892611000e+04 "ST_Thread" "P#0_T#2460395264" "GOMP_For"
+11 4.6756892624000e+04 "ST_Thread" "P#0_T#2426828544" "GOMP_For"
+11 4.6756892630000e+04 "ST_Thread" "P#0_T#2468787968" "GOMP_For"
+11 4.6756892697000e+04 "ST_Thread" "P#0_T#2477180672" "GOMP_For"
+11 4.6756892706000e+04 "ST_Thread" "P#0_T#2452002560" "GOMP_For"
+41 4.6756893239000e+04 "GOMP_Section_Link" "C_Prog" "P#0_T#2494903616" "p#0_section#4_thread#0" "0_4_0"
+11 4.6756893239000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_Section_State"
+11 4.6756893343000e+04 "ST_Thread" "P#0_T#2494903616" "GOMP_For"
+8 5.7921499068000e+04 "P#0_T#2494903616" "CT_Thread"
