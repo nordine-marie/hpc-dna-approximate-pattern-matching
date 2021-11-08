@@ -74,16 +74,16 @@ All the tests have been done with the following hardware & configuration :
 
 ### Hardware for tests :
 
-**Root computer :**
-*CPU :* 
+**Root computer :**  
+*CPU :*   
 Intel(R) Xeon(R) Silver 4116 CPU @ 2.10GHz
 40 cores
 
-*GPU :*
+*GPU :*  
 Quadro P5000 16Go
 
-**12 other computers :**
-i5-8400 CPU
+**12 other computers :**  
+i5-8400 CPU  
 6 cores
 
 **Root computer** was used for OpenMP, CUDA tests and was the MPI root process during MPI and OpenMP+MPI tests.
